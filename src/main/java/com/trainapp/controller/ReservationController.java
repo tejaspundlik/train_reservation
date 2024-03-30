@@ -13,25 +13,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
 @RestController
 @RequestMapping("/api/reservation")
 public class ReservationController {
-@Autowired
-private ReservationService reservationService;
+    @Autowired
+    private ReservationService reservationService;
+
     @PostMapping("/addReservation")
     @ResponseStatus(HttpStatus.CREATED)
-    public String reservationBooking(@RequestBody ReservationRequest reservationRequest){
+    public String reservationBooking(@RequestBody ReservationRequest reservationRequest) {
         reservationService.createReservation(reservationRequest);
         return "Created Reservation";
     }
 
     @GetMapping("/getAll")
     @ResponseStatus(HttpStatus.CREATED)
-    public String getReservations(@RequestBody ReservationRequest reservationRequest){
+    public String getReservations(@RequestBody ReservationRequest reservationRequest) {
         reservationService.getAllReservations();
         return "Created Train";
     }
-    
+
 }
