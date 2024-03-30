@@ -1,38 +1,53 @@
 package com.trainapp.service;
 
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.trainapp.dto.ReservationResponse;
+import com.trainapp.model.ReservationDetails;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.trainapp.dto.ReservationRequest;
-import com.trainapp.model.Reservation;
 import com.trainapp.repository.ReservationRepository;
 
+import java.util.List;
+
 @Service
+@Slf4j
 public class ReservationService {
-@Autowired 
+
 private ReservationRepository repository;
 
-    public void createReservation(ReservationRequest reservationRequest){
-Reservation reservation = new Reservation();
-reservation.setReservationNumber(UUID.randomUUID().toString());
-reservation.setName(reservationRequest.getName());
-reservation.setSex(reservationRequest.getSex());
-reservation.setAge(reservationRequest.getAge());
-reservation.setAddress(reservationRequest.getAddress());
-reservation.setCreditno(reservationRequest.getCreditno());
-reservation.setBank(reservationRequest.getBank());
-reservation.setClassName(reservationRequest.getClassName());
-reservation.setQuantity(reservationRequest.getQuantity());
-reservation.setDate(reservationRequest.getDate());
-reservation.setTrainId(reservationRequest.getTrainId());
-reservation.setPnr(reservationRequest.getPnr());
-repository.save(reservation);
+    public void createReservation(ReservationRequest reservation){
+        ReservationDetails reservationSave = ReservationDetails.builder()
+                .trainId(reservation.getTrainId())
+                .trainName(reservation.getTrainName())
+                .trainType(reservation.getTrainType())
+                .trainRoute(reservation.getTrainRoute())
+                .trainFare(reservation.getTrainFare())
+                .passengerName(reservation.getPassengerName())
+                .passengerNo(reservation.getPassengerNo())
+                .totalFare(reservation.getTotalFare())
+                .date(reservation.getDate())
+                .build();
+        repository.save(reservationSave);
+        log.info(reservationSave + " has been added");
+    }
+    public List<ReservationResponse> getAllReservations() {
+        List<ReservationDetails> reservations = repository.findAll();
+        return reservations.stream().map(this::mapToReservationResponse).toList();
 
+    }
 
-// public List<ReservationResponse> getAllReservations(){
-// implement this
-// }
-}
+    private ReservationResponse mapToReservationResponse(ReservationDetails reservation) {
+        return ReservationResponse.builder()
+                .trainId(reservation.getTrainId())
+                .trainName(reservation.getTrainName())
+                .trainType(reservation.getTrainType())
+                .trainRoute(reservation.getTrainRoute())
+                .trainFare(reservation.getTrainFare())
+                .passengerName(reservation.getPassengerName())
+                .passengerNo(reservation.getPassengerNo())
+                .totalFare(reservation.getTotalFare())
+                .date(reservation.getDate())
+                .build();
+    }
 }

@@ -3,16 +3,14 @@ package com.trainapp.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.trainapp.dto.ReservationRequest;
-import com.trainapp.model.Reservation;
 import com.trainapp.service.ReservationService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -21,11 +19,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/reservation")
 public class ReservationController {
 @Autowired
-private ReservationService rService;
-    @PostMapping
+private ReservationService reservationService;
+    @PostMapping("/addReservation")
     @ResponseStatus(HttpStatus.CREATED)
-    public String reserveTrain(@RequestBody ReservationRequest reservationRequest){
-        rService.createReservation(reservationRequest);
+    public String reservationBooking(@RequestBody ReservationRequest reservationRequest){
+        reservationService.createReservation(reservationRequest);
+        return "Created Reservation";
+    }
+
+    @GetMapping("/getAll")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String getReservations(@RequestBody ReservationRequest reservationRequest){
+        reservationService.getAllReservations();
         return "Created Train";
     }
     
